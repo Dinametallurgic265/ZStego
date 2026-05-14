@@ -1,0 +1,244 @@
+name: Build Installers
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ['v*.*.*']
+    branches: [main]
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+  RUST_BACKTRACE:   1
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+# ─────────────────────────────────────────────────────────────────────────────
+# LINUX  ·  ubuntu-22.04  ·  .deb  .rpm  .AppImage
+# ─────────────────────────────────────────────────────────────────────────────
+jobs:
+  linux:
+    name: Linux — .deb · .rpm · .AppImage
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libwebkit2gtk-4.1-dev \
+            build-essential \
+            curl \
+            wget \
+            file \
+            libssl-dev \
+            libayatana-appindicator3-dev \
+            librsvg2-dev \
+            libxdo-dev \
+            patchelf \
+            rpm
+
+      - name: Setup Rust (stable)
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Rust build
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: zstego/src-tauri -> target
+          cache-on-failure: true
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: false
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ~/.local/share/pnpm/store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('zstego/pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-pnpm-
+
+      - name: Install frontend dependencies
+        working-directory: zstego
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Linux bundles
+        working-directory: zstego
+        run: pnpm tauri build --ci --bundles deb,rpm,appimage
+
+      - name: Upload .deb
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-deb
+          path: zstego/src-tauri/target/release/bundle/deb/*.deb
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Upload .rpm
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-rpm
+          path: zstego/src-tauri/target/release/bundle/rpm/*.rpm
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Upload .AppImage
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-appimage
+          path: zstego/src-tauri/target/release/bundle/appimage/*.AppImage
+          if-no-files-found: error
+          retention-days: 30
+
+# ─────────────────────────────────────────────────────────────────────────────
+# WINDOWS  ·  windows-2025  ·  .exe (NSIS)  .msi
+# ─────────────────────────────────────────────────────────────────────────────
+  windows:
+    name: Windows — .exe (NSIS) · .msi
+    runs-on: windows-2025
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Rust (stable)
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Rust build
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: zstego/src-tauri -> target
+          cache-on-failure: true
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: false
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('zstego/pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-pnpm-
+
+      - name: Install frontend dependencies
+        working-directory: zstego
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Windows bundles
+        working-directory: zstego
+        run: pnpm tauri build --ci --bundles nsis,msi
+
+      - name: Upload NSIS .exe
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-nsis-exe
+          path: zstego/src-tauri/target/release/bundle/nsis/*-setup.exe
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Upload .msi
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-msi
+          path: zstego/src-tauri/target/release/bundle/msi/*.msi
+          if-no-files-found: error
+          retention-days: 30
+
+# ─────────────────────────────────────────────────────────────────────────────
+# macOS  ·  macos-14 (Apple Silicon runner)
+#   build 1: aarch64-apple-darwin  →  Apple Silicon DMG
+#   build 2: x86_64-apple-darwin   →  Intel DMG
+#   build 3: universal-apple-darwin →  Fat Binary DMG (lipo of both)
+# ─────────────────────────────────────────────────────────────────────────────
+  macos:
+    name: macOS — aarch64 · x64 · universal DMG
+    runs-on: macos-14
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Rust with macOS targets
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-apple-darwin,x86_64-apple-darwin
+
+      - name: Cache Rust build
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: zstego/src-tauri -> target
+          cache-on-failure: true
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: false
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ~/Library/pnpm/store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('zstego/pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-pnpm-
+
+      - name: Install frontend dependencies
+        working-directory: zstego
+        run: pnpm install --frozen-lockfile
+
+      - name: Build aarch64 DMG (Apple Silicon)
+        working-directory: zstego
+        run: pnpm tauri build --ci --target aarch64-apple-darwin --bundles dmg
+
+      - name: Build x86_64 DMG (Intel)
+        working-directory: zstego
+        run: pnpm tauri build --ci --target x86_64-apple-darwin --bundles dmg
+
+      - name: Build universal DMG (Fat Binary)
+        working-directory: zstego
+        run: pnpm tauri build --ci --target universal-apple-darwin --bundles dmg
+
+      - name: Upload aarch64 DMG
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-aarch64-dmg
+          path: zstego/src-tauri/target/aarch64-apple-darwin/release/bundle/dmg/*.dmg
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Upload x86_64 DMG
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-x64-dmg
+          path: zstego/src-tauri/target/x86_64-apple-darwin/release/bundle/dmg/*.dmg
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Upload universal DMG
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-universal-dmg
+          path: zstego/src-tauri/target/universal-apple-darwin/release/bundle/dmg/*.dmg
+          if-no-files-found: error
+          retention-days: 30
