@@ -1,0 +1,57 @@
+[package]
+name = "zstego"
+version = "0.1.0"
+description = "Z-Stego — hide encrypted files inside images and audio"
+authors = ["TheHolyOneZ"]
+edition = "2021"
+license = "GPL-3.0-or-later"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+# The `_lib` suffix may seem redundant but it is necessary
+# to make the lib name unique and wouldn't conflict with the bin name.
+# This seems to be only an issue on Windows, see https://github.com/rust-lang/cargo/issues/8519
+name = "zstego_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+tauri-plugin-opener = "2"
+tauri-plugin-store = "2"
+tauri-plugin-dialog = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# Cryptography
+aes-gcm = "0.10"
+chacha20poly1305 = "0.10"
+argon2 = "0.5"
+rand = { version = "0.8", features = ["small_rng"] }
+sha2 = "0.10"
+hmac = "0.12"
+zeroize = { version = "1", features = ["derive"] }
+
+# Image processing
+image = { version = "0.25", features = ["png", "jpeg", "bmp"] }
+
+# Audio processing
+hound = "3"
+symphonia = { version = "0.5", features = ["mp3", "flac", "ogg"] }
+
+# Compression
+zstd = "0.13"
+
+# Parallelism
+rayon = "1"
+
+# Error handling
+thiserror = "2"
+anyhow = "1"
+
+# Base64 for IPC data transfer
+base64 = "0.22"
+
