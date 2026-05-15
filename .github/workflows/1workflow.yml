@@ -14,9 +14,7 @@ env:
   RUST_BACKTRACE:   1
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
-# ─────────────────────────────────────────────────────────────────────────────
-# LINUX  ·  ubuntu-22.04  ·  .deb  .rpm  .AppImage
-# ─────────────────────────────────────────────────────────────────────────────
+
 jobs:
   linux:
     name: Linux — .deb · .rpm · .AppImage
@@ -98,9 +96,7 @@ jobs:
           if-no-files-found: error
           retention-days: 30
 
-# ─────────────────────────────────────────────────────────────────────────────
-# WINDOWS  ·  windows-2025-vs2026  ·  .exe (NSIS)  .msi
-# ─────────────────────────────────────────────────────────────────────────────
+
   windows:
     name: Windows — .exe (NSIS) · .msi
     runs-on: windows-2025-vs2026
@@ -157,12 +153,6 @@ jobs:
           if-no-files-found: error
           retention-days: 30
 
-# ─────────────────────────────────────────────────────────────────────────────
-# macOS  ·  macos-14 (Apple Silicon runner)
-#   build 1: aarch64-apple-darwin   →  Apple Silicon DMG
-#   build 2: x86_64-apple-darwin    →  Intel DMG
-#   build 3: universal-apple-darwin →  Fat Binary DMG (lipo of both)
-# ─────────────────────────────────────────────────────────────────────────────
   macos:
     name: macOS — aarch64 · x64 · universal DMG
     runs-on: macos-14
